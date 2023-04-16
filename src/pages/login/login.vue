@@ -58,7 +58,7 @@ import {useCookies} from "@vueuse/integrations/useCookies";
 const form = reactive({
   password: "",
   username: ""
-})
+}
 
 const rules = {
   username: [
