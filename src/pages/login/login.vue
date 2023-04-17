@@ -48,17 +48,24 @@
 
 
 <script setup>
-import {reactive} from 'vue'
-import {login} from "~/api/manager.js";
+import {computed, reactive, ref} from 'vue'
+import {login, getPermission} from "~/api/manager.js";
 import {User, Lock} from '@element-plus/icons-vue'
 import {ElNotification} from 'element-plus'
 import {router} from "~/router/index.js";
-import {useCookies} from "@vueuse/integrations/useCookies";
+import {getToken, setToken, removeToken} from "~/utils/auth.js";
+import store from "~/store/index.js";
+
+
+const loading = computed(() => {
+  return store.state.is_loading_login
+})
+
 // do not use same name with ref
 const form = reactive({
   password: "",
   username: ""
-}
+})
 
 const rules = {
   username: [
@@ -89,29 +96,34 @@ const rules = {
 }
 
 const onSubmit = () => {
-
+  // loading.value = true
+  store.commit("change_login_state", true)
 
   login(form.username, form.password).then(res => {
-    //提示成功
-    ElNotification({
-      title: '牛逼',
-      message: '你记住了你的密码！！',
-      type: 'success',
-      duration: 2000
-    })
-
     //存储token
-    let cookie = useCookies();
-    cookie.set("userToken", res.data.token)
+
+    setToken(res.data.token)
 
     //跳转到后台首页
     router.push({
       path: "/home"
     })
+
+    //获取用户相关信息
+    getPermission().then(res => {
+
+      //将登录的用户信息存储到vuex中
+      store.commit("change_user_info", res)
+      console.log(store.state.user)
+
+    })
   }).catch(err => {
     console.log(err.response.data)
+  }).finally(() => {
+    store.commit("change_login_state", false)
   })
 }
+
 </script>
 
 <style scoped>
