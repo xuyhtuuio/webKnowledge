@@ -48,16 +48,16 @@
 
 
 <script setup>
-import {computed, reactive, ref} from 'vue'
+import {computed, onBeforeMount, onMounted, reactive, ref} from 'vue'
 import {login, getPermission} from "~/api/manager.js";
 import {User, Lock} from '@element-plus/icons-vue'
-import {ElNotification} from 'element-plus'
 import {router} from "~/router/index.js";
 import {getToken, setToken, removeToken} from "~/utils/auth.js";
 import store from "~/store/index.js";
 
 
 const loading = computed(() => {
+  console.log(store.state.is_loading_login)
   return store.state.is_loading_login
 })
 
@@ -95,34 +95,41 @@ const rules = {
   ]
 }
 
-const onSubmit = () => {
-  // loading.value = true
-  store.commit("change_login_state", true)
 
+function Login () {
+  store.commit("change_login_state", true)
   login(form.username, form.password).then(res => {
     //存储token
-
     setToken(res.data.token)
-
     //跳转到后台首页
     router.push({
       path: "/home"
     })
-
-    //获取用户相关信息
-    getPermission().then(res => {
-
-      //将登录的用户信息存储到vuex中
-      store.commit("change_user_info", res)
-      console.log(store.state.user)
-
+    store.dispatch("getUserInfo", store).then(res => {
+      console.log(res)
     })
-  }).catch(err => {
-    console.log(err.response.data)
-  }).finally(() => {
-    store.commit("change_login_state", false)
   })
 }
+
+const onSubmit = () => {
+  // loading.js.value = true
+  Login()
+
+}
+function keyUp (event) {
+  if(event.key === "Enter") {
+   Login()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener("keyup", keyUp)
+})
+
+onBeforeMount(() => {
+  document.removeEventListener("keyup", keyUp)
+})
+
 
 </script>
 

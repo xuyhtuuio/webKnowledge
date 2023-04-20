@@ -3,6 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import WindiCSS from 'vite-plugin-windicss'
 import path from "path"
 // https://vitejs.dev/config/
+
+//设置根目录
 export default defineConfig({
   resolve: {
     alias: {
@@ -10,6 +12,7 @@ export default defineConfig({
     }
   },
 
+// 解决跨域
   server:{
     proxy:{
       '/api': {

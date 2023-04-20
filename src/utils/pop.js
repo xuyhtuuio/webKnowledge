@@ -28,3 +28,12 @@ export function WrongPassword() {
     })
 }
 
+export function NoRepeatLogin () {
+    return ElNotification({
+        title: '别他妈重复登录',
+        message: '欠？',
+        type: 'error',
+        duration: 2000
+    })
+}
+

@@ -17,3 +17,9 @@ export function getPermission () {
         url: "/admin/getinfo",
     })
 }
+
+export function logout () {
+    return MyAxios.post({
+        url: "/admin/logout",
+    })
+}

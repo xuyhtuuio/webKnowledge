@@ -5,7 +5,6 @@ import {getToken, setToken, removeToken} from "~/utils/auth.js";
 import {NoPermission, WrongPassword, LoginSuccess} from "~/utils/pop.js";
 import store from "~/store/index.js";
 
-
 let SINGLE = true
 class MyAxios {
     constructor(BASEURL, TIMEOUT) {
@@ -13,8 +12,6 @@ class MyAxios {
             baseURL: BASEURL,
             timeout: TIMEOUT
         })
-
-
 
         this.instance.interceptors.request.use(function (config) {
             //存储cookie
@@ -44,15 +41,13 @@ class MyAxios {
         });
     }
 
-
-
     request(config) {
         return new Promise((resolve, reject) => {
             this.instance.request(config).then(r => {
                 resolve(r.data)
             }).catch(reject => {
                 store.commit("change_login_state", false)
-                console.log(reject.response.data)
+                console.log(reject.response)
                 WrongPassword()
             })
         })
