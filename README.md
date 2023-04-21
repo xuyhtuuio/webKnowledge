@@ -1,6 +1,7 @@
-# Vue 3 + Vite
+# 这是一个商场后台管理系统项目
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+非常全面，有很多的封装，很适合提高开发水平的时候来做。
+有很多的组件封装，还有一些核心功能的抽出。
 
 ## Recommended IDE Setup
 
