@@ -23,3 +23,10 @@ export function logout () {
         url: "/admin/logout",
     })
 }
+
+export function changePassword (data) {
+    return MyAxios.post({
+        url : "/admin/updatepassword",
+        data,
+    })
+}

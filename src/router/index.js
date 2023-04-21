@@ -14,16 +14,27 @@ export const router = createRouter({
             }
         },
         {
+          path: "/home",
+          redirect: "/home/index"
+        },
+        {
             path: "/home",
-            component: () => import("~/pages/index.vue"),
-            meta : {
-                title : "主控台"
-            }
+            component: () => import("~/layouts/admin.vue"),
+            children: [
+                {
+                    path : "index",
+                    component : () => import("~/pages/index.vue"),
+                    meta: {
+                        title: "主控台"
+                    }
+                }
+            ],
+
         },
         {
             path: "/login",
             component: () => import("~/pages/login/login.vue"),
-            meta : {
+            meta: {
                 title: "登陆界面"
             }
         },

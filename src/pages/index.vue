@@ -1,11 +1,15 @@
 <template>
   <div class="">
     这是首页
-    <el-button @click="Logout">退出登录</el-button>
+    <el-button type="primary" style="margin-left: 16px" @click="drawer = true">
+      open
+    </el-button>
+
+
     <el-button @click="get">获取token</el-button>
-    <el-button @click="getPer"></el-button>
-<!--    <el-card>{{ $store.state.user }}</el-card>-->
-    <admin />
+<!--    <el-button @click="getPer"></el-button>-->
+    <el-card>{{ $store.state.user }}</el-card>
+<!--    <admin />-->
   </div>
 </template>
 
@@ -26,34 +30,8 @@ function get() {
 }
 
 console.log(store.state.user)
+const drawer = ref(false)
 
-function Logout() {
-  return popModal("确定退出？", "warning", "退出了可麻烦")
-      .then(() => {
-        ElMessage({
-          type: 'success',
-          message: '退出成功',
-        })
-
-        logout()
-            .finally(() => {
-              //  清除token
-              removeToken()
-              //跳转
-              router.push({
-                path: "/login"
-              })
-              //清除vuex里的正在登录的用户数据
-              store.commit("clean_user_info")
-            })
-      })
-      .catch(() => {
-        ElMessage({
-          type: 'info',
-          message: '很明智',
-        })
-      })
-}
 
 </script>
 

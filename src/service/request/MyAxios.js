@@ -2,7 +2,7 @@ import axios from "axios";
 import {BASEURL, TIMEOUT} from "~/service/request/config.js";
 import {ElNotification} from "element-plus";
 import {getToken, setToken, removeToken} from "~/utils/auth.js";
-import {NoPermission, WrongPassword, LoginSuccess} from "~/utils/pop.js";
+import {NoPermission, WrongPassword, LoginSuccess, updatePasswordSuccess} from "~/utils/pop.js";
 import store from "~/store/index.js";
 
 let SINGLE = true
@@ -48,7 +48,10 @@ class MyAxios {
             }).catch(reject => {
                 store.commit("change_login_state", false)
                 console.log(reject.response)
-                WrongPassword()
+                if(reject.response.config.url === "/admin/updatepassword") {
+                    updatePasswordSuccess(reject.response.data.msg)
+                }
+                else WrongPassword()
             })
         })
     }

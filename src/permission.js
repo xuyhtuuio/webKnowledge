@@ -18,6 +18,7 @@ router.beforeEach(async (to, from, next) => {
         return next({path: from.path ? from.path : "/"})
     }
 
+
     //如果用户登录了，那么就自动获取登录的信息
     if (token) {
         await store.dispatch("getUserInfo", store)
@@ -26,7 +27,6 @@ router.beforeEach(async (to, from, next) => {
 
     //设置动态标题
     document.title = (to.meta.title ? to.meta.title : "").concat("————您最坚实的后盾～").trim()
-
     next()
 })
 

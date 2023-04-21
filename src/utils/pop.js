@@ -37,3 +37,15 @@ export function NoRepeatLogin () {
     })
 }
 
+export function updatePasswordSuccess(message="修改成功") {
+    return ElNotification({
+        title: '?',
+        message,
+        type: 'warning',
+        duration: 2000,
+        showClose: false
+    })
+}
+
+
+
