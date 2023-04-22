@@ -66,134 +66,43 @@
 </template>
 
 <script setup>
-
-import {Aim, ArrowDown, Basketball, Expand, Fold, FullScreen, MoonNight, Refresh} from "@element-plus/icons-vue";
-import store from "~/store/index.js";
-import popModal from "~/utils/popmodal.js";
-import {ElMessage} from "element-plus";
-import {changePassword, logout} from "~/api/manager.js";
-import {getToken, removeToken} from "~/utils/auth.js";
-import {router} from "~/router/index.js";
+import {Aim, ArrowDown, Basketball, Expand, Fold, FullScreen, Refresh} from "@element-plus/icons-vue";
 import {useFullscreen} from '@vueuse/core'
-import {reactive, ref} from "vue";
+import {ref} from "vue";
 import FlodDrawer from "~/components/flodDrawer.vue";
+import {encaChangePassword, encaFullScreenAndRefresh, encaLogout} from "~/hooks/useManger.js";
 
+const flodDrawerRef = ref(null)
 const {
   isFullscreen,
   toggle
 } = useFullscreen()
 
-const drawer = ref(false)
+const {
+  form,
+  rules,
+  onSubmit
+} = encaChangePassword()
 
-const flodDrawerRef = ref(null)
+const {
+  Logout
+} = encaLogout()
 
-
-function Logout() {
-  return popModal("确定退出？", "warning", "退出了可麻烦")
-      .then(() => {
-        ElMessage({
-          type: 'success',
-          message: '退出成功',
-        })
-        logout()
-            .finally(() => {
-              //  清除token
-              removeToken()
-              //跳转
-              router.push({
-                path: "/login"
-              })
-              //清除vuex里的正在登录的用户数据
-              store.commit("clean_user_info")
-              //刷新页面
-              location.reload()
-            })
-      })
-      .catch(() => {
-        ElMessage({
-          type: 'info',
-          message: '很明智',
-        })
-      })
-}
-
-
-const form = reactive({
-  oldpassword: "",
-  password: "",
-  repassword: ""
-
-})
-
-const rules = {
-  oldpassword: [
-    {
-      required: true,
-      message: '老密码不能为空！！',
-      trigger: 'blur',
-    },
-    {
-      min: 3,
-      message: '长度至少为3个！！',
-      trigger: 'blur'
-    },
-  ],
-  password: [
-    {
-      required: true,
-      message: '新密码不能为空！！',
-      trigger: 'blur',
-    },
-    {
-      min: 3,
-      max: 12,
-      message: '长度为3-12个！！',
-      trigger: 'blur'
-    },
-  ],
-  repassword: [
-    {
-      required: true,
-      message: '新密码不能为空！！',
-      trigger: 'blur',
-    },
-    {
-      min: 3,
-      max: 12,
-      message: '长度为3-12个！！',
-      trigger: 'blur'
-    },
-
-  ]
-}
-
-function handleChangePassword() {
-  console.log("您要修改密码")
-  // drawer.value = true
-  flodDrawerRef.value.open()
-}
-
-//刷新
-const handleRefresh = () => location.reload()
-const handleFullScreen = () => toggle()
-
-const onSubmit = () => {
-  //修改密码逻辑
-  changePassword(form)
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-}
-
+const {
+  handleRefresh,
+  handleFullScreen,
+  handleChangePassword
+} = encaFullScreenAndRefresh(toggle, flodDrawerRef)
 </script>
 
 <style scoped>
 .f-header {
   @apply flex items-center bg-purple-500 text-light-50 fixed top-0 left-0 right-0;
-//width: 100%; height: 64px; z-index: 1000;
+width: 100%; height: 64px; z-index: 1000;
+}
+
+.el-dropdown {
+  color: white;
 }
 
 .logo {
