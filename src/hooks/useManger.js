@@ -1,8 +1,8 @@
-import {reactive} from "vue";
-import {changePassword, logout} from "~/api/manager.js";
+import {computed, handleError, onBeforeMount, onMounted, reactive, ref} from "vue";
+import {changePassword, login, logout} from "~/api/manager.js";
 import popModal from "~/utils/popmodal.js";
 import {ElMessage} from "element-plus";
-import {removeToken} from "~/utils/auth.js";
+import {removeToken, setToken} from "~/utils/auth.js";
 import {router} from "~/router/index.js";
 import store from "~/store/index.js";
 
@@ -105,17 +105,103 @@ export function encaLogout() {
     }
 }
 
-export function encaFullScreenAndRefresh(toggle, flodDrawerRef) {
+export function encaFullScreenAndRefreshAndExpod(toggle, flodDrawerRef) {
+    let isCollapse = ref(false)
     const handleRefresh = () => location.reload()
     const handleFullScreen = () => toggle()
     const isFlodDrawer = () => flodDrawerRef.value.open()
     const handleChangePassword = () => isFlodDrawer()
+    const handleExpod = () => store.commit("isAsideWidth")
+
 
     return {
         handleRefresh,
         handleFullScreen,
-        handleChangePassword
+        handleChangePassword,
+        handleExpod,
     }
 }
+
+
+export function encaLogin () {
+
+    const form = reactive({
+        password: "",
+        username: ""
+    })
+    const rules = {
+        username: [
+            {
+                required: true,
+                message: '用户名不能为空！！',
+                trigger: 'blur',
+            },
+            {
+                min: 3,
+                message: '长度至少为3个！！',
+                trigger: 'blur'
+            },
+        ],
+        password: [
+            {
+                required: true,
+                message: '密码不能为空！！',
+                trigger: 'blur',
+            },
+            {
+                min: 3,
+                max: 12,
+                message: '长度为3-12个！！',
+                trigger: 'blur'
+            },
+        ]
+    }
+    function Login () {
+        store.commit("change_login_state", true)
+        login(form.username, form.password).then(res => {
+            //存储token
+            setToken(res.data.token)
+            //跳转到后台首页
+            router.push({
+                path: "/home"
+            })
+            store.dispatch("getUserInfo", store).then(res => {
+                console.log(res)
+            })
+        })
+    }
+
+    const onSubmit = () => {
+        // loading.js.value = true
+        Login()
+
+    }
+    function keyUp (event) {
+        if(event.key === "Enter") {
+            Login()
+        }
+    }
+    const loading = computed(() => {
+        return store.state.is_loading_login
+    })
+
+    onMounted(() => {
+        document.addEventListener("keyup", keyUp)
+    })
+
+    onBeforeMount(() => {
+        document.removeEventListener("keyup", keyUp)
+    })
+
+    return {
+        form,
+        rules,
+        Login,
+        onSubmit,
+        keyUp,
+        loading
+    }
+}
+
 
 

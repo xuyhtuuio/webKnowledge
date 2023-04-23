@@ -27,7 +27,22 @@ export const router = createRouter({
                     meta: {
                         title: "主控台"
                     }
+                },
+                {
+                    path : "about",
+                    component: () => import("~/pages/about/about.vue"),
+                    meta: {
+                        title : "关于"
+                    }
+                },
+                {
+                    path : "goods/list",
+                    component: () => import("~/pages/goods/list.vue"),
+                    meta: {
+                        title: "商品列表"
+                    }
                 }
+
             ],
 
         },
@@ -38,5 +53,6 @@ export const router = createRouter({
                 title: "登陆界面"
             }
         },
+
     ]
 })

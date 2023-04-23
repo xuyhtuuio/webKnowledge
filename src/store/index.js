@@ -8,6 +8,8 @@ const store = createStore({
             //用户信息
             user: {},
             is_loading_login: false,
+            //展开或缩起菜单
+            asideWidth: "300px"
         }
     },
     mutations: {
@@ -17,8 +19,11 @@ const store = createStore({
         change_login_state(state, isShow) {
             state.is_loading_login = isShow
         },
-        clean_user_info (state) {
+        clean_user_info(state) {
             state.user = {}
+        },
+        isAsideWidth(state) {
+            state.asideWidth = state.asideWidth == "64px" ? "300px" :  "64px"
         }
     },
     actions: {

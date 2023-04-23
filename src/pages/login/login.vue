@@ -42,95 +42,20 @@
       </el-form>
     </el-col>
   </el-row>
-
-
 </template>
 
 
 <script setup>
-import {computed, onBeforeMount, onMounted, reactive, ref} from 'vue'
-import {login, getPermission} from "~/api/manager.js";
 import {User, Lock} from '@element-plus/icons-vue'
-import {router} from "~/router/index.js";
-import {getToken, setToken, removeToken} from "~/utils/auth.js";
-import store from "~/store/index.js";
-
-
-const loading = computed(() => {
-  console.log(store.state.is_loading_login)
-  return store.state.is_loading_login
-})
-
-// do not use same name with ref
-const form = reactive({
-  password: "",
-  username: ""
-})
-
-const rules = {
-  username: [
-    {
-      required: true,
-      message: '用户名不能为空！！',
-      trigger: 'blur',
-    },
-    {
-      min: 3,
-      message: '长度至少为3个！！',
-      trigger: 'blur'
-    },
-  ],
-  password: [
-    {
-      required: true,
-      message: '密码不能为空！！',
-      trigger: 'blur',
-    },
-    {
-      min: 3,
-      max: 12,
-      message: '长度为3-12个！！',
-      trigger: 'blur'
-    },
-  ]
-}
-
-
-function Login () {
-  store.commit("change_login_state", true)
-  login(form.username, form.password).then(res => {
-    //存储token
-    setToken(res.data.token)
-    //跳转到后台首页
-    router.push({
-      path: "/home"
-    })
-    store.dispatch("getUserInfo", store).then(res => {
-      console.log(res)
-    })
-  })
-}
-
-const onSubmit = () => {
-  // loading.js.value = true
-  Login()
-
-}
-function keyUp (event) {
-  if(event.key === "Enter") {
-   Login()
-  }
-}
-
-onMounted(() => {
-  document.addEventListener("keyup", keyUp)
-})
-
-onBeforeMount(() => {
-  document.removeEventListener("keyup", keyUp)
-})
-
-
+import {encaLogin} from "~/hooks/useManger.js";
+const {
+  form,
+  rules,
+  Login,
+  onSubmit,
+  keyUp,
+  loading
+} = encaLogin()
 </script>
 
 <style scoped>

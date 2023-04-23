@@ -8,7 +8,7 @@
 
     <el-button @click="get">获取token</el-button>
 <!--    <el-button @click="getPer"></el-button>-->
-    <el-card>{{ $store.state.user }}</el-card>
+<!--    <el-card>{{ $store.state.user }}</el-card>-->
 <!--    <admin />-->
   </div>
 </template>

@@ -8,9 +8,9 @@
         <span>云皓-最坚实的后盾</span>
       </div>
 
-      <el-icon class="icon-btn">
-        <fold/>
-        <Expand/>
+      <el-icon class="icon-btn" @click="handleExpod">
+        <expand v-if="$store.state.asideWidth == '300px'"/>
+        <fold v-else/>
       </el-icon>
       <el-tooltip effect="dark" content="刷新" placement="bottom">
         <el-icon class="icon-btn" @click="handleRefresh">
@@ -19,7 +19,6 @@
       </el-tooltip>
 
       <div class="ml-188 flex items-center">
-
         <el-tooltip effect="dark" content="全屏" placement="bottom">
           <el-icon class="icon-btn" @click="handleFullScreen">
             <full-screen v-if="!isFullscreen"/>
@@ -70,7 +69,11 @@ import {Aim, ArrowDown, Basketball, Expand, Fold, FullScreen, Refresh} from "@el
 import {useFullscreen} from '@vueuse/core'
 import {ref} from "vue";
 import FlodDrawer from "~/components/flodDrawer.vue";
-import {encaChangePassword, encaFullScreenAndRefresh, encaLogout} from "~/hooks/useManger.js";
+import {
+  encaChangePassword,
+  encaFullScreenAndRefreshAndExpod,
+  encaLogout
+} from "~/hooks/useManger.js";
 
 const flodDrawerRef = ref(null)
 const {
@@ -91,14 +94,19 @@ const {
 const {
   handleRefresh,
   handleFullScreen,
-  handleChangePassword
-} = encaFullScreenAndRefresh(toggle, flodDrawerRef)
+  handleChangePassword,
+  handleExpod,
+} = encaFullScreenAndRefreshAndExpod(toggle, flodDrawerRef)
+
+
 </script>
 
 <style scoped>
 .f-header {
   @apply flex items-center bg-purple-500 text-light-50 fixed top-0 left-0 right-0;
-width: 100%; height: 64px; z-index: 1000;
+  width: 100%;
+  height: 64px;
+  z-index: 1000;
 }
 
 .el-dropdown {

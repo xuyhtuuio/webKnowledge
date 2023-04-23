@@ -1,54 +1,75 @@
 <template>
-  <div class="Menu">
-      <el-row class="tac">
-        <el-col :span="24">
-          <el-menu
-              default-active="2"
-              class="el-menu-vertical-demo"
-              @open="handleOpen"
-              @close="handleClose"
-          >
-            <el-sub-menu index="1">
+  <div class="Menu" :style="{ width:$store.state.asideWidth }">
+    <el-row class="tac">
+      <el-col :span="24">
+        <el-menu
+            :default-active="activePath"
+            default-active="2"
+            class="border-0"
+            @select="handleSelect"
+            :collapse="isCollapse"
+            :collapse-transition="false"
+            unique-opened
+        >
+          <template v-for="(item,index) in textMenu" :key="index">
+            <el-sub-menu v-if="item.child && item.child.length > 0" :index="item.name">
               <template #title>
                 <el-icon>
-                  <location/>
+                  <component :is="item.icon"></component>
                 </el-icon>
-                <span>主控台</span>
+                <span>{{ item.name }}</span>
               </template>
-              <el-menu-item-group title="Group One">
-                <el-menu-item index="1-1">item one</el-menu-item>
-                <el-menu-item index="1-2">item two</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group Two">
-                <el-menu-item index="1-3">item three</el-menu-item>
-              </el-menu-item-group>
-              <el-sub-menu index="1-4">
-                <template #title>item four</template>
-                <el-menu-item index="1-4-1">item one</el-menu-item>
-              </el-sub-menu>
+              <el-menu-item v-for="(item2,index2) in item.child" :key="index2" :index="item2.frontpath">
+                <el-icon>
+                  <component :is="item2.icon"></component>
+                </el-icon>
+                <span>{{ item2.name }}</span>
+              </el-menu-item>
             </el-sub-menu>
-          </el-menu>
-        </el-col>
-      </el-row>
+
+            <el-menu-item v-else :index="item.frontpath">
+              <el-icon>
+                <component :is="item.icon"></component>
+              </el-icon>
+              <span>{{ item.name }}</span>
+            </el-menu-item>
+          </template>
+        </el-menu>
+      </el-col>
+    </el-row>
   </div>
+
 </template>
 
 <script setup>
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
-} from '@element-plus/icons-vue'
+import {router} from "~/router/index.js";
+import {computed, ref} from "vue";
+import store from "~/store/index.js";
+import {useRoute} from "vue-router";
+import {textMenu} from "~/mock/textForMenu.js";
+const route = useRoute()
 
-const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath)
+const isCollapse = computed(() => {
+  return store.state.asideWidth == "300px" ? false : true
+})
+
+const activePath = ref(route.path)
+const handleSelect = (index) => {
+  //跳转
+  router.push(index)
 }
-const handleClose = (key, keyPath) => {
-  console.log(key, keyPath)
-}
+
 </script>
 
-<style scoped>
+<style>
+.Menu {
+  transition: all 1.5s;
+  top: 64px;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  @apply shadow-md fixed bg-light-50;
 
+}
 </style>
