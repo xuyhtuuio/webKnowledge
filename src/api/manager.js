@@ -30,3 +30,5 @@ export function changePassword (data) {
         data,
     })
 }
+
+

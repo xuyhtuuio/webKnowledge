@@ -11,7 +11,7 @@
             :collapse-transition="false"
             unique-opened
         >
-          <template v-for="(item,index) in textMenu" :key="index">
+          <template v-for="(item,index) in userMenu" :key="index">
             <el-sub-menu v-if="item.child && item.child.length > 0" :index="item.name">
               <template #title>
                 <el-icon>
@@ -46,8 +46,9 @@ import {router} from "~/router/index.js";
 import {computed, ref} from "vue";
 import store from "~/store/index.js";
 import {useRoute} from "vue-router";
-import {textMenu} from "~/mock/textForMenu.js";
+
 const route = useRoute()
+const userMenu = store.state.user.data.menus
 
 const isCollapse = computed(() => {
   return store.state.asideWidth == "300px" ? false : true

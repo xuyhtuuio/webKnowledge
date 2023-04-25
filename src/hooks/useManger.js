@@ -106,7 +106,6 @@ export function encaLogout() {
 }
 
 export function encaFullScreenAndRefreshAndExpod(toggle, flodDrawerRef) {
-    let isCollapse = ref(false)
     const handleRefresh = () => location.reload()
     const handleFullScreen = () => toggle()
     const isFlodDrawer = () => flodDrawerRef.value.open()
@@ -163,7 +162,7 @@ export function encaLogin () {
             setToken(res.data.token)
             //跳转到后台首页
             router.push({
-                path: "/home"
+                path: "/"
             })
             store.dispatch("getUserInfo", store).then(res => {
                 console.log(res)
