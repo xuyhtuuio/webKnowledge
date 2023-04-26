@@ -11,7 +11,7 @@ const store = createStore({
             is_loading_login: false,
             //展开或缩起菜单
             asideWidth: "300px",
-            rules : []
+            rules : [],
         }
     },
     mutations: {
@@ -29,7 +29,8 @@ const store = createStore({
         },
         set_rulesName(state, rules) {
             state.rules = rules
-        }
+        },
+
     },
     actions: {
         getUserInfo({commit}) {

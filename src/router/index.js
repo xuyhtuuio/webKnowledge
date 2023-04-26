@@ -3,6 +3,7 @@ import {
     createWebHashHistory
 } from "vue-router"
 
+
 export const router = createRouter({
     history: createWebHashHistory(),
 
@@ -42,31 +43,34 @@ const asyncRoute = [
         }
     },
     {
-        path: "/about",
-        name: "/about",
-        component: () => import("~/pages/about/about.vue"),
-        meta: {
-            title: "关于"
-        }
-    },
-    {
         path: "/goods/list",
         name: "/goods/list",
         component: () => import("~/pages/goods/list.vue"),
         meta: {
             title: "商品列表"
         }
+    },
+    {
+        path:"/category/list",
+        name:"/category/list",
+        component : () => import("~/pages/front/front.vue"),
+        meta:{
+            title:"分类列表"
+        }
     }
 ]
 
+
 //添加动态路由，用来匹配菜单
 export function asyncAddRoute (menus) {
+    let isNewRoute = false
     const findRouteAndAsyncRoute = (arr) => {
         arr.forEach(e => {
             let item = asyncRoute.find(Routeitem => Routeitem.path == e.frontpath)
             if(item && !router.hasRoute(e.frontpath)) {
                 console.log(item)
                 router.addRoute("admin", item)
+                isNewRoute = true
             }
             if(e.child && e.child.length > 0) {
                 //如果有子路由就递归再执行一次
@@ -76,7 +80,8 @@ export function asyncAddRoute (menus) {
     }
 
     findRouteAndAsyncRoute(menus)
+    console.log(router.getRoutes())
+    return isNewRoute
 }
-
 
 
